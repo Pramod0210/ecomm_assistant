@@ -9,6 +9,6 @@ wheels/
 # Virtual environments
 .venv
 myvenv
-.env/
+.env
 data/
 logs/
