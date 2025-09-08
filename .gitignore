@@ -10,6 +10,5 @@ wheels/
 .venv
 myvenv
 .env
-data/
-logs/
-test
+data
+logs

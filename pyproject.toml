@@ -1,7 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]         # PEP 660 editable support ke liye naya setuptools
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "ecomm-assistant"
 version = "0.1.0"
-description = "Ecomm assistant to query products"
+description = "Assistant to provide details for user query"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "fastapi>=0.116.1",
+    "langchain==0.3.27",
+    "python-dotenv==1.1.1",
+    "streamlit==1.49.1",
+]
+
+# Optional: authors, license
+authors = [{ name = "Pramod Kumar" }]
+license = { text = "Proprietary" }
+
+# Optional: CLI command (python -m pip install -e . ke baad yeh create hoga)
+[project.scripts]
+ecomm-assistant = "ecomm_assistant.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["prod_assistant"]
+include = ["ecomm_assistant*"]

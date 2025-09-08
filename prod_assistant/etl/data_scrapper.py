@@ -10,12 +10,12 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 from selenium.webdriver.chrome.options import Options
 
-options = Options()
+# options = Options()
 # set your options, e.g. headless, user-agent, etc.
 # options.add_argument("--headless=new")
 
 # Explicitly tell uc which major Chrome version to use so it downloads the matching driver
-driver = uc.Chrome(options=options, version_main=139)   # <-- use your Chrome major version
+# driver = uc.Chrome(options=options, version_main=139)   # <-- use your Chrome major version
 
 class FlipkartScraper:
     def __init__(self, output_dir="data"):
@@ -68,7 +68,9 @@ class FlipkartScraper:
         """Scrape Flipkart products based on a search query.
         """
         options = uc.ChromeOptions()
-        driver = uc.Chrome(options=options,use_subprocess=True)
+        driver = uc.Chrome(options=options, version_main=139, use_subprocess=True)   # <-- use your Chrome major version
+
+        # driver = uc.Chrome(options=options,use_subprocess=True)
         search_url = f"https://www.flipkart.com/search?q={query.replace(' ', '+')}"
         driver.get(search_url)
         time.sleep(4)
