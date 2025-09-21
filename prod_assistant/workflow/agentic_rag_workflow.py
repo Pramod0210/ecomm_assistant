@@ -16,6 +16,7 @@ class AgenticRAG:
 
     class AgentState(TypedDict):
         messages: Annotated[Sequence[BaseMessage], add_messages]
+        rewrite_count: int
     
     def __init__(self):
         self.retriever_obj = Retriever()
@@ -45,19 +46,7 @@ class AgenticRAG:
     
     # ---------- Nodes ----------
     def _ai_assistant(self, state: AgentState):
-        """Call the ASSISTANT to generate a response to the user.
 
-        The ASSISTANT is responsible for generating a response to the user based on the conversation history.
-        If the user's last message contains the words "price", "review", or "product", the ASSISTANT should return a response indicating that the tool is not responsible for answering the user's question.
-        Otherwise, the ASSISTANT should generate a response to the user directly.
-
-        The ASSISTANT is implemented as a LangGraph pipeline.
-        The pipeline consists of a prompt, the LLM, and a StrOutputParser.
-        The prompt is a ChatPromptTemplate with the following format:
-        "You are a helpful assistant. Answer the user directly.\n\nQuestion: {question}\nAnswer:"
-        The LLM is a LangchainLLM model.
-        The StrOutputParser is responsible for parsing the output of the LLM into a string.
-        """
         print("--- CALL ASSISTANT ---")
         messages = state["messages"]
         last_message = messages[-1].content
@@ -112,6 +101,17 @@ class AgenticRAG:
             [HumanMessage(content=f"Rewrite the query to be clearer: {question}")]
         )
         return {"messages": [HumanMessage(content=new_q.content)]}
+        # rewrite_count = state.get("rewrite_count", 0)
+        # if rewrite_count >= 2:  # Limit to 2 rewrites
+        #     return {"messages": [HumanMessage(content="Sorry, I couldn't find relevant information.")]}
+        # new_q = self.llm.invoke(
+        #     [HumanMessage(content=f"Rewrite the query to be clearer: {question}")]
+        # )
+        # # Increment rewrite_count
+        # return {
+        #     "messages": [HumanMessage(content=new_q.content)],
+        #     "rewrite_count": rewrite_count + 1
+        # }
     
         # ---------- Build Workflow ----------
     def _build_workflow(self):

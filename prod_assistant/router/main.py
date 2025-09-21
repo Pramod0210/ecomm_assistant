@@ -1,3 +1,4 @@
+
 import uvicorn
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
@@ -23,6 +24,7 @@ app.add_middleware(
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("chat.html", {"request": request})
+
 
 @app.post("/get", response_class=HTMLResponse)
 async def chat(msg: str = Form(...)):
