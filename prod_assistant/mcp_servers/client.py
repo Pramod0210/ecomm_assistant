@@ -6,7 +6,7 @@ async def main():
         "hybrid_search": {   # server name
             "command": "python",
             "args": [
-                r"D:\Study\LLMOps\ecomm_assistant\prod_assistant\mcp_servers\product_search_server.py"
+                r"D:\complete_content_new\llmops-batch\ecomm-prod-assistant\prod_assistant\mcp_servers\product_search_server.py"
             ],  # absolute path
             "transport": "stdio",
         }
@@ -21,9 +21,9 @@ async def main():
     web_tool = next(t for t in tools if t.name == "web_search")
 
     # --- Step 1: Try retriever first ---
-    query = "Samsung Galaxy S25 price"
+    #query = "Samsung Galaxy S25 price"
     # query = "iPhone 15"
-    # query = "iPhone 16?"
+    query = "iPhone 17?"
     retriever_result = await retriever_tool.ainvoke({"query": query})
     print("\nRetriever Result:\n", retriever_result)
 

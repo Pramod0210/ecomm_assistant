@@ -81,7 +81,7 @@ class Retriever:
         return output
     
 if __name__=='__main__':
-    user_query = "Can you suggest good budget iPhone under 1,00,000 INR?"
+    user_query = "Can you suggest good budget iPhone under 1,00,00 INR?"
     
     retriever_obj = Retriever()
     
@@ -102,18 +102,13 @@ if __name__=='__main__':
             formatted_chunks.append(formatted)
         return "\n\n---\n\n".join(formatted_chunks)
     
-    # retrieved_contexts = [_format_docs(doc) for doc in retrieved_docs]
-    # print(retrieved_contexts)
+    retrieved_contexts = [_format_docs(doc) for doc in retrieved_docs]
     
-        # Unpack tuples if present
-    docs = [doc[0] if isinstance(doc, tuple) else doc for doc in retrieved_docs]
-    retrieved_contexts = _format_docs(docs)
-    # print(retrieved_contexts)
     #this is not an actual output this have been written to test the pipeline
     response="iphone 16 plus, iphone 16, iphone 15 are best phones under 1,00,000 INR."
     
-    context_score = evaluate_context_precision(user_query,response,[retrieved_contexts])
-    relevancy_score = evaluate_response_relevancy(user_query,response,[retrieved_contexts])
+    context_score = evaluate_context_precision(user_query,response,retrieved_contexts)
+    relevancy_score = evaluate_response_relevancy(user_query,response,retrieved_contexts)
     
     print("\n--- Evaluation Metrics ---")
     print("Context Precision Score:", context_score)
