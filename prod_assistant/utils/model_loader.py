@@ -11,48 +11,70 @@ from exception.custom_exception import ProductAssistantException
 import asyncio
 
 
+# class ApiKeyManager:
+#     def __init__(self):
+#         self.api_keys = {}
+
+#         raw = os.getenv("API_KEYS")
+#         if raw:
+#             try:
+#                 parsed = json.loads(raw)
+#                 if isinstance(parsed, dict):
+#                     self.api_keys = parsed
+#                     log.info("Loaded API_KEYS JSON")
+#             except Exception as e:
+#                 log.warning("Failed to parse API_KEYS JSON", error=str(e))
+
+#         # Decide required keys dynamically
+#         required = ["GOOGLE_API_KEY"]
+#         provider = os.getenv("LLM_PROVIDER", "openai").lower()
+#         if provider == "openai":
+#             required.append("OPENAI_API_KEY")
+#         elif provider == "groq":
+#             required.append("GROQ_API_KEY")
+#         elif provider == "google":
+#             required.append("GOOGLE_API_KEY")
+
+#         # Load from env if not in API_KEYS JSON
+#         for key in required:
+#             if not self.api_keys.get(key):
+#                 val = os.getenv(key)
+#                 if val:
+#                     self.api_keys[key] = val
+#                     log.info(f"Loaded {key} from env")
+
+#         # Final check
+#         missing = [k for k in required if not self.api_keys.get(k)]
+#         if missing:
+#             raise ProductAssistantException(f"Missing API keys: {missing}", sys)
+    
+#     def get(self, key: str) -> str:
+#         val = self.api_keys.get(key)
+#         if not val:
+#             raise KeyError(f"API key for {key} is missing")
+#         return val
+
 class ApiKeyManager:
     def __init__(self):
-        self.api_keys = {}
+        self.api_keys = {
+            "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"),
+            "GOOGLE_API_KEY": os.getenv("GOOGLE_API_KEY"),
+            "GROQ_API_KEY": os.getenv("GROQ_API_KEY"),
+            "ASTRA_DB_API_ENDPOINT": os.getenv("ASTRA_DB_API_ENDPOINT"),
+            "ASTRA_DB_APPLICATION_TOKEN": os.getenv("ASTRA_DB_APPLICATION_TOKEN"),
+            "ASTRA_DB_KEYSPACE": os.getenv("ASTRA_DB_KEYSPACE"),
+        }
 
-        raw = os.getenv("API_KEYS")
-        if raw:
-            try:
-                parsed = json.loads(raw)
-                if isinstance(parsed, dict):
-                    self.api_keys = parsed
-                    log.info("Loaded API_KEYS JSON")
-            except Exception as e:
-                log.warning("Failed to parse API_KEYS JSON", error=str(e))
+        # Just log loaded keys (don't print actual values)
+        for key, val in self.api_keys.items():
+            if val:
+                log.info(f"{key} loaded from environment")
+            else:
+                log.warning(f"{key} is missing from environment")
 
-        # Decide required keys dynamically
-        required = ["GOOGLE_API_KEY"]
-        provider = os.getenv("LLM_PROVIDER", "openai").lower()
-        if provider == "openai":
-            required.append("OPENAI_API_KEY")
-        elif provider == "groq":
-            required.append("GROQ_API_KEY")
-        elif provider == "google":
-            required.append("GOOGLE_API_KEY")
+    def get(self, key: str):
+        return self.api_keys.get(key)
 
-        # Load from env if not in API_KEYS JSON
-        for key in required:
-            if not self.api_keys.get(key):
-                val = os.getenv(key)
-                if val:
-                    self.api_keys[key] = val
-                    log.info(f"Loaded {key} from env")
-
-        # Final check
-        missing = [k for k in required if not self.api_keys.get(k)]
-        if missing:
-            raise ProductAssistantException(f"Missing API keys: {missing}", sys)
-    
-    def get(self, key: str) -> str:
-        val = self.api_keys.get(key)
-        if not val:
-            raise KeyError(f"API key for {key} is missing")
-        return val
 
 class ModelLoader:
     """
@@ -146,9 +168,9 @@ if __name__ == "__main__":
 
     # Test Embedding
     embeddings = loader.load_embeddings()
-    print(f"Embedding Model Loaded: {embeddings}")
+    # print(f"Embedding Model Loaded: {embeddings}")
     result = embeddings.embed_query("Hello, how are you?")
-    print(f"Embedding Result: {result}")
+    # print(f"Embedding Result: {result}")
 
     # Test LLM
     llm = loader.load_llm()
