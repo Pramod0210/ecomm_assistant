@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools>=68"]         # PEP 660 editable support ke liye naya setuptools
+requires = ["setuptools>=68"]         # newer setuptools, for PEP 660 editable installs
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "ecomm-assistant"
 version = "0.1.0"
-description = "Assistant to provide details for user query"
+description = "Agentic RAG e-commerce assistant over scraped product reviews, with MCP-served retrieval and web search"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -15,11 +15,11 @@ dependencies = [
     "streamlit==1.49.1",
 ]
 
-# Optional: authors, license
 authors = [{ name = "Pramod Kumar" }]
-license = { text = "Proprietary" }
+license = { text = "MIT" }
+license-files = ["LICENSE"]
 
-# Optional: CLI command (python -m pip install -e . ke baad yeh create hoga)
+# CLI command, created after `python -m pip install -e .`
 [project.scripts]
 ecomm-assistant = "ecomm_assistant.cli:main"
 
